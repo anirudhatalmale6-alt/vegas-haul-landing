@@ -13,22 +13,30 @@
     if (x) x.addEventListener('click', function () { flag.classList.add('hide'); });
   }
 
-  // Reveal sections as they scroll in
-  var targets = document.querySelectorAll('.sec-head, .svc, .about-copy, .about-media, .contact-info, .form-card');
+  // Reveal blocks as they scroll in
+  var targets = document.querySelectorAll('.svc, .about, .card, .head-center');
   if ('IntersectionObserver' in window && targets.length) {
     Array.prototype.forEach.call(targets, function (el) { el.classList.add('inview'); });
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
       });
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
     Array.prototype.forEach.call(targets, function (el) { io.observe(el); });
   }
 
+  // Keep the "What do you need?" placeholder grey until a real choice is made
+  var sel = document.getElementById('f-service');
+  if (sel) {
+    var paint = function () { sel.style.color = sel.value ? '' : '#98a0ab'; };
+    sel.addEventListener('change', paint);
+    paint();
+  }
+
   /* Contact form.
-     DEMO MODE: no endpoint is wired yet. Once the client picks an inbox we
-     point ENDPOINT at the form handler (Web3Forms / Netlify Forms) and this
-     posts for real — the markup and validation below do not change. */
+     DEMO MODE: no endpoint is wired yet. Once the client names an inbox we point
+     ENDPOINT at the form handler (Web3Forms / Netlify Forms) and this posts for
+     real — the markup and validation below do not change. */
   var ENDPOINT = null;
 
   var form = document.getElementById('quoteForm');
